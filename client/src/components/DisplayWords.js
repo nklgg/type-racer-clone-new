@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DisplayWords = ({ input, words, player }) => {
+	const [typed, setTyped] = useState('');
+
+	useEffect(() => {
+		console.log(typed);
+		if (input === words[player.currentWordIndex].slice(0, input.length)) {
+			setTyped(input);
+		}
+	}, [input]);
+
 	const wordsToBeTyped = (words, player) => {
 		return words.slice(player.currentWordIndex + 1, words.length).join(' ');
 	};
@@ -10,25 +19,24 @@ const DisplayWords = ({ input, words, player }) => {
 	};
 
 	const currentWord = (words, player) => {
-		let lettersToBeTyped = words[player.currentWordIndex].slice(
-			input.length,
-			words[player.currentWordIndex].length + 1
-		);
-		let wordsSentence = words.join(' ');
-		let typedLetters;
-
-		// console.log(typedLetters, lettersToBeTyped);
-		// console.log(words[player.currentWordIndex].charAt(input.length));
-		// console.log(
-		// 	words[player.currentWordIndex].slice(
-		// 		input.length,
-		// 		words[player.currentWordIndex].length + 1
-		// 	)
-		// );
-		if (input === wordsSentence.slice(0, input.length)) {
+		let typedLetters = '';
+		let lettersToBeTyped = words[player.currentWordIndex];
+		if (input === words[player.currentWordIndex].slice(0, input.length)) {
+			// setTyped(input);
 			typedLetters = input;
+			lettersToBeTyped = words[player.currentWordIndex].slice(
+				input.length,
+				words[player.currentWordIndex].length
+			);
 		}
-		return words[player.currentWordIndex];
+		// console.log(typedLetters, lettersToBeTyped);
+		// return words[player.currentWordIndex];
+		return (
+			<>
+				<span style={{ backgroundColor: 'green' }}>{typedLetters}</span>
+				<span>{`${lettersToBeTyped} `}</span>
+			</>
+		);
 	};
 
 	return (
@@ -36,9 +44,8 @@ const DisplayWords = ({ input, words, player }) => {
 			<span style={{ backgroundColor: 'green' }}>
 				{`${typedWords(words, player)} `}
 			</span>
-			<span style={{ backgroundColor: 'yellow' }}>
-				{`${currentWord(words, player)} `}
-			</span>
+
+			{currentWord(words, player)}
 			<span style={{ backgroundColor: 'pink' }}>
 				{wordsToBeTyped(words, player)}
 			</span>
